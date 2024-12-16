@@ -4,18 +4,13 @@ const User = require("../user/User");
 // Create a new store
 const createStore = async (req, res) => {
   try {
-    const { name, location, description } = req.body;
+    const { name, location, description } = JSON.parse(req.body.data);
 
-    // Fetch the user from the request
+    // Fetch user from the request
     const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
-    }
-
-    // Check if the user already owns a store
-    if (user.is_store_owner) {
-      return res.status(400).json({ message: "User already owns a store." });
     }
 
     // Create a new store
@@ -24,17 +19,16 @@ const createStore = async (req, res) => {
       location,
       description,
       created_by: req.user._id,
-      book_ids: [], // Initialize with an empty array
     });
 
-    // Update the user's `store_id` and `is_store_owner` fields
-    user.store_id = store._id;
-    user.is_store_owner = true;
+    // Update the user's `store_id` array and `is_store_owner` field
+    user.store_id.push(store._id); // Push the new store ID into the array
+    user.is_store_owner = true; // Ensure this is set to true
     await user.save();
 
     res.status(201).json({
       message: "Store created successfully.",
-      store,
+      data: store,
     });
   } catch (error) {
     res

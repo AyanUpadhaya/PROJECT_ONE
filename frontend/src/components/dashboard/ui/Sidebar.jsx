@@ -6,6 +6,7 @@ export default function Sidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
+
   function isActive(path, location) {
     return path.includes(location.pathname) ? "active" : "text-white";
   }
@@ -46,7 +47,7 @@ export default function Sidebar() {
               <Link
                 to={`/dashboard/${role}/store`}
                 className={`nav-link ${isActive(
-                  ["/dashboard/user/store"],
+                  ["/dashboard/user/store", "/dashboard/user/store/add"],
                   location
                 )}`}
                 aria-current="page"

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 
 const UserSettings = () => {
-  const { user, setUser } = useAuth();
+  const { user, setUser, saveUserToLocalStorage } = useAuth();
   // Base URL for the API
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -105,13 +105,20 @@ const UserSettings = () => {
       });
       setSuccessMessage("User details updated successfully.");
       setUser((prev) => ({
-        ...user,
+        ...prev,
         name: response?.data?.user?.name,
         email: response?.data?.user?.email,
         address: response?.data?.user?.address,
       }));
+      saveUserToLocalStorage({
+        ...user,
+        ...response?.data?.user,
+      });
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message);
+      console.log(error);
+      const errorMessage =
+        error.response?.data?.message || "An unknown error occurred";
+      setErrorMessage(errorMessage);
     } finally {
       setIsDetailsUpadating(false);
     }
@@ -146,9 +153,15 @@ const UserSettings = () => {
           ...prev,
           photoUrl: response?.data?.user?.photoUrl,
         }));
+        saveUserToLocalStorage({
+          ...user,
+          photoUrl: response?.data?.user?.photoUrl,
+        });
       }
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message);
+      const errorMessage =
+        error.response?.data?.message || "An unknown error occurred";
+      setErrorMessage(errorMessage);
     } finally {
       setImageUpdating(false);
     }
@@ -187,7 +200,9 @@ const UserSettings = () => {
 
       setSuccessMessage("Password updated successfully.");
     } catch (error) {
-      setErrorMessage(error?.response?.data?.message);
+      const errorMessage =
+        error.response?.data?.message || "An unknown error occurred";
+      setErrorMessage(errorMessage);
     } finally {
       setIsPasswordUpadating(false);
     }
@@ -214,8 +229,8 @@ const UserSettings = () => {
                 id="name"
                 name="name"
                 className="form-control"
+                value={userDetails?.name}
                 onChange={handleInputChange}
-                value={user?.name}
                 required
               />
             </div>
@@ -226,7 +241,7 @@ const UserSettings = () => {
                 id="email"
                 name="email"
                 className="form-control"
-                value={user?.email}
+                value={userDetails?.email}
                 onChange={handleInputChange}
                 required
                 readOnly
@@ -241,7 +256,7 @@ const UserSettings = () => {
                 id="address"
                 name="address"
                 className="form-control"
-                value={user?.value}
+                value={userDetails?.address}
                 onChange={handleInputChange}
               />
             </div>
