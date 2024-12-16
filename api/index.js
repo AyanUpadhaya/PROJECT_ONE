@@ -18,6 +18,7 @@ const categoryRoutes = require("./modules/category/categoryRoutes");
 
 //import first admin utility
 const createFirstAdmin = require("./utils/createFirstAdmin");
+const { initializeMulter } = require("./utils/multerConfig");
 
 //mongoose
 const connection_string = process.env.MOGO_URI;
@@ -34,6 +35,8 @@ mongoose
     console.log("Failed to connect Database ", err);
     process.exit(1);
   });
+
+initializeMulter(app);
 
 //routes
 app.use(userRoutes);

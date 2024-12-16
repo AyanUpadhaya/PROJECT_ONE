@@ -7,25 +7,21 @@ const {
   getUserStores,
   updateStore,
   toggleLikeStore,
+  testRouteController,
 } = require("./storeController");
 const verifyToken = require("../../utils/verifyToken"); // Middleware for authentication
-const upload = require("../../utils/multerConfig");
-
 
 const router = express.Router();
-router.use(
-  upload.fields([
-    { name: "file", maxCount: 1 },
-    { name: "files", maxCount: 10 },
-  ])
-);
 
 
-// Create a new store
-router.post("/stores", verifyToken, createStore); //**
 
 // Get all stores
+router.post("/test", testRouteController);
+
 router.get("/stores", getAllStores); //**
+
+// Create a new store
+router.post("/stores", createStore); //**
 
 // Get a store by ID
 router.get("/stores/:id", getStoreById); //**

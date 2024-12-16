@@ -6,15 +6,9 @@ const {
   changePassword,
   updateProfilePicture,
 } = require("./userController");
-const upload = require("../../utils/multerConfig");
+
 
 const router = express.Router();
-router.use(
-  upload.fields([
-    { name: "file", maxCount: 1 },
-    { name: "files", maxCount: 10 },
-  ])
-);
 
 //Route to register user
 router.post("/register", register); //**

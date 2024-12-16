@@ -1,66 +1,98 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getToken } from "../../../../utils/getToken";
+
+import useAuth from "../../../../hooks/useAuth";
+import BackToPrev from "../../../../components/dashboard/shared/BackToPrev";
 
 const UserAddStore = () => {
+  // Base URL for the API
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  // Get token from localStorage
+  const getToken = () => {
+    const authData = localStorage.getItem("buchhandlung_auth");
+    if (authData) {
+      try {
+        const parsedAuth = JSON.parse(authData);
+        return parsedAuth.token;
+      } catch (e) {
+        console.error("Failed to parse authentication token:", e);
+        return null;
+      }
+    }
+    return null;
+  };
+
+  // Axios instance with base URL and Authorization header
+  const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+  });
+  const { user, setUser, saveUserToLocalStorage } = useAuth();
   const [storeDetails, setStoreDetails] = useState({
     name: "",
     location: "",
     description: "",
   });
- 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-  // Axios instance with base URL and Authorization header
-  const axiosInstance = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${getToken()}`,
-    },
-  });
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setStoreDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    setStoreDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
   };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
-    formData.append("data", JSON.stringify({
-      name: storeDetails.name,
-      location: storeDetails.location,
-      description: storeDetails.description,
-    }));
+    formData.append(
+      "data",
+      JSON.stringify({
+        name: storeDetails?.name,
+        location: storeDetails?.location,
+        description: storeDetails?.description,
+        created_by: user?._id,
+      })
+    );
 
     try {
-      // Replace with your API endpoint
-      const response = await axiosInstance.post("/stores", formData, {
+      setLoading(false);
+      const response = await axiosInstance.post(`/stores`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${getToken()}`,
         },
       });
-
       setSuccessMessage("Store created successfully!");
-      console.log(response.data);
+      setUser((prev) => ({
+        ...prev,
+        store_id: response?.data?.data?._id,
+        is_store_owner: true,
+      }));
+      saveUserToLocalStorage({
+        ...user,
+        store_id: response?.data?.data?._id,
+        is_store_owner: true,
+      });
+       setStoreDetails({ name: "", location: "", description: "" });
     } catch (error) {
       setErrorMessage(
         error.response?.data?.message || "Failed to create store."
       );
       console.error(error);
+    } finally {
+      setLoading(false);
+     
     }
   };
 
   return (
     <div className="container mt-2">
+      <BackToPrev
+        className={"mb-2"}
+        path={"/dashboard/user/store"}
+        title={"Back"}
+      ></BackToPrev>
       <h2>Create Store</h2>
       {successMessage && (
         <div className="alert alert-success">{successMessage}</div>
@@ -107,9 +139,9 @@ const UserAddStore = () => {
             onChange={handleInputChange}
           ></textarea>
         </div>
-       
-        <button type="submit" className="btn btn-primary">
-          Create Store
+
+        <button disabled={loading} type="submit" className="btn btn-primary">
+          {loading ? "Loading..." : "Create Store"}
         </button>
       </form>
     </div>

@@ -12,10 +12,10 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
     phone: { type: String },
-    store_id:[{
+    store_id:{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Store",
-    }],
+    },
     is_store_owner: { type: Boolean, default: false },
     photoUrl: {
       type: String,

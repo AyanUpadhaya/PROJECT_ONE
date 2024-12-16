@@ -4,10 +4,12 @@ const User = require("../user/User");
 // Create a new store
 const createStore = async (req, res) => {
   try {
-    const { name, location, description } = JSON.parse(req.body.data);
+    const { name, location, description, created_by } = JSON.parse(
+      req.body.data
+    );
 
     // Fetch user from the request
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(created_by);
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
@@ -18,11 +20,13 @@ const createStore = async (req, res) => {
       name,
       location,
       description,
-      created_by: req.user._id,
+      created_by,
     });
-
-    // Update the user's `store_id` array and `is_store_owner` field
-    user.store_id.push(store._id); // Push the new store ID into the array
+    if (user.is_store_owner){
+      return res.status(400).json({message:"You already have a store",data:user})
+    }
+      // Update the user's `store_id`
+    user.store_id = store._id;
     user.is_store_owner = true; // Ensure this is set to true
     await user.save();
 
@@ -34,6 +38,22 @@ const createStore = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to create store.", error: error.message });
+  }
+};
+
+const testRouteController = async (req, res) => {
+  try {
+    // Check if required form data exists (if applicable)
+    if (!req.body.data) {
+      return res.status(400).send("Missing required data field: data");
+    }
+
+    const reqBody = JSON.parse(req?.body?.data);
+    console.log(reqBody);
+    res.send("Ok");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -208,4 +228,5 @@ module.exports = {
   getUserStores,
   updateStore,
   toggleLikeStore,
+  testRouteController,
 };

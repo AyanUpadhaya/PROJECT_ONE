@@ -9,18 +9,11 @@ const {
   getSingleBook,
 } = require("./bookController");
 
-const upload = require("../../utils/multerConfig");
+
 
 // Middleware for authentication
 
 const router = express.Router();
-
-router.use(
-  upload.fields([
-    { name: "file", maxCount: 1 },
-    { name: "files", maxCount: 10 },
-  ])
-);
 
 // Create a new book
 router.post("/books", createBook); //**

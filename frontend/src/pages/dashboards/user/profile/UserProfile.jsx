@@ -8,7 +8,6 @@ function UserProfile() {
     <>
       <div className="w-100 ">
         <div className="d-flex flex-column justify-content-between gap-3 ">
-         
           <div className="d-flex justify-content-between gap-3 align-items-center">
             <div>
               <h2>Profile</h2>
@@ -53,7 +52,8 @@ function UserProfile() {
                     <span className="fw-bold">Email:</span>{" "}
                     {(user && user?.email) || "No data found"}
                     <br />
-                  
+                    <span className="fw-bold">Store Id:</span>{" "}
+                    {(user && user?.store_id) || "No data found"}
                   </div>
                 </div>
               </div>
