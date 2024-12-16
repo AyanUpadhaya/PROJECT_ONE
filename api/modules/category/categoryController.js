@@ -13,11 +13,11 @@ const createCategory = async (req, res) => {
         .json({ message: "Category already exists.", success: false });
     }
 
-    const category = await Category.create({
-      name,
-      description,
-    });
-    res.status(201).json({ ...category, success: true });
+    const category = new Category({ name });
+    await category.save();
+    res
+      .status(201)
+      .json({ message: "Category created", success: true, data: category });
   } catch (error) {
     res
       .status(500)
@@ -56,7 +56,7 @@ const getCategoryById = async (req, res) => {
 const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name } = req.body;
 
     const updatedCategory = await Category.findByIdAndUpdate(
       id,
@@ -68,7 +68,13 @@ const updateCategory = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    res.status(200).json(updatedCategory);
+    res
+      .status(200)
+      .json({
+        message: "Category updated",
+        success: true,
+        data: updatedCategory,
+      });
   } catch (error) {
     res
       .status(500)
@@ -94,7 +100,7 @@ const deleteCategory = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    res.status(200).json({ message: "Category deleted successfully" });
+    res.status(200).json({ message: "Category deleted successfully",success: true });
   } catch (error) {
     res
       .status(500)

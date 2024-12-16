@@ -1,4 +1,4 @@
-import useAuth from "../../../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
 
 const Nav = () => {
@@ -10,10 +10,11 @@ const Nav = () => {
           <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <div className="ms-auto text-end">
               {isAuthenticated && (
+
                 <button
                   onClick={() => logout()}
                   type="button"
-                  className="btn btn-outline-light me-2"
+                  className="btn btn-outline-success me-2"
                 >
                   Logout
                 </button>

@@ -146,6 +146,27 @@ const getOrdersByStore = async (req, res) => {
   }
 };
 
+// Controller to get orders for the logged-in user
+const getUserOrders = async (req, res) => {
+  const userId = req.user._id; // Assuming user ID is available in req.user after authentication
+
+  try {
+
+    const orders = await Order.find({ order_by: userId })
+      .populate("order_by", "name email") 
+      .populate("stores.store_id", "name address")
+      .populate("stores.books.book_id", "title author") 
+      .sort({ createdAt: -1 }); 
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: "No orders found." });
+    }
+
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
+  }
+};
 
 
 
@@ -155,5 +176,5 @@ module.exports = {
   getOrderById,
   updateOrderStatus,
   getOrdersByStore,
- 
+  getUserOrders,
 };

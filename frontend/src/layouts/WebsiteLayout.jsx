@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Header from "../components/commons/webiste/Header";
+import Header from "../components/webiste/Header";
 
 function WebsiteLayout (){
   return (

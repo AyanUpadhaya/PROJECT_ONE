@@ -26,7 +26,7 @@ mongoose
   .then(() => {
     app.listen(3000, () => {
       console.log("App is running on port: 3000");
-      console.log("Database connection successfull");
+      console.log("Database connection successful");
     });
     createFirstAdmin().then(() => {});
   })

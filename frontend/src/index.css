@@ -28,5 +28,5 @@ h1 {
 }
 
 .calc-height{
-  height: calc(100%-50px);
+  height: calc(100% - 100px);
 }

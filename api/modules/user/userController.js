@@ -6,18 +6,20 @@ const uploadToCloudinary = require("../../utils/uploadToCloudinary");
 //user registration
 const register = async (req, res, next) => {
   const reqBody = req.body;
-  const { email } = reqBody;
+  const { email, password } = reqBody;
   const user = await User.findOne({ email });
 
   if (!user) {
     const hashPassword = bcrypt.hashSync(password, 10);
-    const result = await User.create({ email, password: hashPassword, role });
+    const result = await User.create({ ...reqBody, password: hashPassword });
     if (result) {
       const userObject = result.toObject();
       delete userObject.password;
-      return res
-        .status(201)
-        .json({ message: "Registration Successfull", data: userObject });
+      return res.status(201).json({
+        message: "Registration Successful",
+        success: true,
+        data: userObject,
+      });
     }
   } else {
     return res.status(400).json({ message: "Email already exists." });
@@ -56,12 +58,17 @@ const login = async (req, res, next) => {
     );
 
     return res.status(200).send({
-      message: "Login successfull",
+      message: "Login successful",
       data: {
-        _id: user._id,
-        email: user.email,
-        role: user.role,
-        is_store_owner: user.is_store_owner,
+        _id: user?._id,
+        name: user?.name,
+        email: user?.email,
+        role: user?.role,
+        is_store_owner: user?.is_store_owner,
+        address: user?.address,
+        phone: user?.phone,
+        photoUrl: user?.photoUrl,
+        store_id: user?.store_id,
         token: token,
       },
     });
@@ -72,7 +79,7 @@ const login = async (req, res, next) => {
 const updateUserDetails = async (req, res) => {
   try {
     const { user_id } = req.params; // Assuming user_id is sent in params
-    const updates = req.body; // Data to update
+    const updates = JSON.parse(req.body.data); // Data to update
 
     const updatedUser = await User.findByIdAndUpdate(user_id, updates, {
       new: true,
@@ -85,7 +92,7 @@ const updateUserDetails = async (req, res) => {
 
     res.status(200).json({
       message: "User details updated successfully",
-      data: updatedUser,
+      user: updatedUser,
     });
   } catch (error) {
     res
@@ -98,7 +105,7 @@ const updateUserDetails = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { user_id } = req.params;
-    const { oldPassword, newPassword } = req.body;
+    const { oldPassword, newPassword } = JSON.parse(req.body.data);
 
     const user = await User.findById(user_id);
 
@@ -147,7 +154,6 @@ const updateProfilePicture = async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
-
 
 module.exports = {
   register,

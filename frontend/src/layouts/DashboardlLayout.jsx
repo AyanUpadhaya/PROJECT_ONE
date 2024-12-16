@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/commons/dashboard/ui/Sidebar";
-import Nav from "../components/commons/dashboard/nav/Nav";
+import Sidebar from "../components/dashboard/ui/Sidebar";
+import Nav from "../components/dashboard/nav/Nav";
 
 function DashboardlLayout() {
   return (
@@ -10,7 +10,7 @@ function DashboardlLayout() {
         <div className="flex-fill h-full overflow-hidden">
           <div className="w-full h-full">
             <Nav></Nav>
-            <main className="h-full overflow-y-scroll p-2">
+            <main className="calc-height overflow-y-scroll p-2">
               <Outlet />
             </main>
           </div>

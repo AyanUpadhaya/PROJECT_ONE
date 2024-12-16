@@ -7,9 +7,11 @@ function Register() {
   const { user, register, isAuthenticated } = useAuth();
   const [loding, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
   });
   let navigate = useNavigate();
 
@@ -37,14 +39,30 @@ function Register() {
     formData.confirmPassword == "" ||
     formData.password == "" ||
     formData.email == "" ||
-	loding;
+    formData.name == "" ||
+    formData.phone == "" ||
+    loding;
 
- if (isAuthenticated) return <Navigate to={`/dashboard/${user?.role}`} />;
+  if (isAuthenticated) return <Navigate to={`/dashboard/${user?.role}`} />;
 
   return (
     <div className="py-2">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
+        {/* name */}
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
+            Full Name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            name="name"
+            aria-describedby="nameHelp"
+            onChange={handleChange}
+          />
+        </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email address
@@ -55,6 +73,20 @@ function Register() {
             id="email"
             name="email"
             aria-describedby="emailHelp"
+            onChange={handleChange}
+          />
+        </div>
+        {/* phone */}
+        <div className="mb-3">
+          <label htmlFor="phone" className="form-label">
+            Phone
+          </label>
+          <input
+            type="phone"
+            className="form-control"
+            id="phone"
+            name="phone"
+            aria-describedby="phoneHelp"
             onChange={handleChange}
           />
         </div>

@@ -6,7 +6,7 @@ const uploadToCloudinary = require("../../utils/uploadToCloudinary");
 const createBook = async (req, res) => {
   try {
     const reqBody = JSON.parse(req.body.data);
-
+    const { store_id } = reqBody;
     // Check if store exists
     const store = await Store.findById(store_id);
     if (!store) {
@@ -17,6 +17,7 @@ const createBook = async (req, res) => {
 
     // Save the new book
     await newBook.save();
+    store.book_ids.push(newBook._id);
 
     res
       .status(201)

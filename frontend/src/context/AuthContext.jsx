@@ -7,12 +7,12 @@ export const AuthProvider = ({ children }) => {
 
   // Function to save user data in local storage
   const saveUserToLocalStorage = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("buchhandlung_auth", JSON.stringify(userData));
   };
 
   // Function to load user data from local storage
   const loadUserFromLocalStorage = () => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("buchhandlung_auth");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       const isValid = validateToken(parsedUser.token);
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   // Function to log out the user
   const logout = (message = "You have been logged out.") => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("buchhandlung_auth");
     setUser(null);
     alert(message);
   };
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, register, login, logout, isAuthenticated }}
+      value={{ user, setUser, register, login, logout, isAuthenticated }}
     >
       {children}
     </AuthContext.Provider>
