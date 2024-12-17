@@ -6,7 +6,6 @@ const BookDetails = () => {
   const { state } = useLocation();
   const { payload, type } = state || {};
 
-
   return (
     <div className="container mt-4 ">
       <BackToPrev
@@ -25,15 +24,14 @@ const BookDetails = () => {
         <div className="col-md-8">
           <div className="card-body">
             <h5 className="card-title">{payload?.title}</h5>
+            <br />
             <p className="card-text">
               <strong>Author:</strong> {payload?.author}
             </p>
             <p className="card-text">
               <strong>Category:</strong> {payload?.category_id?.name || "N/A"}
             </p>
-            <p className="card-text">
-              <strong>Store:</strong> {payload?.store_id || "N/A"}
-            </p>
+
             <p className="card-text">
               <strong>Price:</strong> ${payload?.price}
             </p>
@@ -53,6 +51,9 @@ const BookDetails = () => {
                 : "N/A"}
             </p>
             <p className="card-text">
+              <strong>Tags:</strong> {payload?.tags?.join(", ")}
+            </p>
+            <p className="card-text">
               <strong>About:</strong> {payload?.about}
             </p>
             <p className="card-text">
@@ -60,7 +61,6 @@ const BookDetails = () => {
                 Created on {new Date(payload?.createdAt).toLocaleDateString()}
               </small>
             </p>
-            
           </div>
         </div>
       </div>

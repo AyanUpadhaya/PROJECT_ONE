@@ -14,6 +14,11 @@ const UserStoreTable = ({ data }) => {
       },
     });
   };
+
+  const truncate = (text) => {
+    if(text) return text.length > 34 ? text.slice(0, 34) + "..." : text;
+    return text
+  };
   return (
     <>
       <div className="table-responsive">
@@ -29,7 +34,7 @@ const UserStoreTable = ({ data }) => {
           </thead>
           <tbody>
             <tr>
-              <td>{data?.name}</td>
+              <td>{truncate(data?.name)}</td>
               <td>{data?.created_by?.name}</td>
               <td>{data?.book_ids?.length}</td>
               <td>{formatToLocaleDateString(data?.createdAt)}</td>

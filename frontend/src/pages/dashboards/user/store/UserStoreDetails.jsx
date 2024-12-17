@@ -6,7 +6,7 @@ import useStore from "../../../../hooks/useStore";
 const UserStoreDetails = () => {
   const { state } = useLocation();
   const { payload, type } = state || {};
-  console.log(payload);
+
 
   const { myStore } = useStore();
   return (
@@ -21,7 +21,6 @@ const UserStoreDetails = () => {
         <div className="d-flex flex-column  gap-1 align-items-center">
           <div>
             <h2>{myStore?.name}</h2>
-            <p>{myStore?._id}</p>
           </div>
           <div>
             <img className="img-fluid" src={myStore?.cover_photo} alt="" />
@@ -35,21 +34,7 @@ const UserStoreDetails = () => {
               <span className="fw-bold">Location</span>: {myStore?.location}
             </p>
           </div>
-          <div className="align-self-start">
-            <div className="d-flex gap-2">
-              <div className="card p-3">
-                <div className="card-body">
-                  ro
-                  <h3>Likes:{myStore?.liked_by.length}</h3>
-                </div>
-              </div>
-              <div className="card p-3">
-                <div className="card-body">
-                  <h3>Books:{myStore?.book_ids.length}</h3>
-                </div>
-              </div>
-            </div>
-          </div>
+         
         </div>
       </div>
     </div>

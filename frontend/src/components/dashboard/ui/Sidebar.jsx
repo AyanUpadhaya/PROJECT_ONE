@@ -68,6 +68,7 @@ export default function Sidebar() {
                     "/dashboard/user/books",
                     "/dashboard/user/books/add",
                     "/dashboard/user/books/details",
+                    "/dashboard/user/books/update",
                   ],
                   location
                 )}`}

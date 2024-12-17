@@ -16,7 +16,7 @@ const CategoryDropdown = ({
         value={selectedCategory}
         onChange={(e) => onCategoryChange(e.target.value)}
         className="w-full p-2 border rounded"
-        required
+        
       >
         <option value="" disabled>
           Select a category

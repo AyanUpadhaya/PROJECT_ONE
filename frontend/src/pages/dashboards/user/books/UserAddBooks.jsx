@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 const UserAddBooks = ({ onSubmit }) => {
   const [categories, setCategories] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const { user, isBookPosting, errorMessage, successMessage, createBook } =
-    useBooks();
+  const { user, isBookPosting, createBook } = useBooks();
 
   // Base URL for the API
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -78,10 +79,7 @@ const UserAddBooks = ({ onSubmit }) => {
       alert("Qty can not be less than one");
       return;
     }
-    if (bookDetails.price < bookDetails.sell_price) {
-      alert("price can not be less than sell price");
-      return;
-    }
+    
     if (bookDetails.price == 0 || bookDetails.sell_price == 0) {
       alert("price can not be zero");
       return;
@@ -95,13 +93,15 @@ const UserAddBooks = ({ onSubmit }) => {
     };
 
     // Pass the formData to the parent component or API function
-    createBook(bookData, coverPhoto).then((data) => {
-      console.log(data);
-
-      if (data?._id) {
-        navigate("/dashboard/user/books");
-      }
-    });
+    createBook(bookData, coverPhoto)
+      .then((data) => {
+        if (data?._id) {
+          navigate("/dashboard/user/books");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(error?.message);
+      });
   };
 
   useEffect(() => {

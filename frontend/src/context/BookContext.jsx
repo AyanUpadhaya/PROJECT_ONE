@@ -12,8 +12,6 @@ export const BookProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [deleteError, setdeleteError] = useState(null);
   const [books, setBooks] = useState([]);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [storeBooks, setStoreBooks] = useState([]);
   const { user } = useLoadUser();
 
@@ -29,13 +27,7 @@ export const BookProvider = ({ children }) => {
     },
   });
 
-  //helper
-  const handleErrorMessage = (error) => {
-    const errorMessage =
-      error.response?.data?.message || "An unknown error occurred";
-    setErrorMessage(errorMessage);
-  };
-
+ 
   // Create a new book
   const createBook = async (bookData, coverPhoto) => {
     setIsBookPosting(true);
@@ -55,12 +47,10 @@ export const BookProvider = ({ children }) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setSuccessMessage("Book created successfully!");
       setStoreBooks((prev) => [...prev, response?.data?.data]);
 
       return response?.data?.data;
     } catch (err) {
-      handleErrorMessage(err);
       console.error(err);
     } finally {
       setIsBookPosting(false);
@@ -79,7 +69,6 @@ export const BookProvider = ({ children }) => {
       }
      
     } catch (err) {
-      handleErrorMessage(err);
       console.error(err);
     } finally {
       setLoading(false);
@@ -97,7 +86,7 @@ export const BookProvider = ({ children }) => {
       }
       return response.data
     } catch (err) {
-      handleErrorMessage(err);
+      
       console.error(err);
     } finally {
       setLoading(false);
@@ -106,7 +95,7 @@ export const BookProvider = ({ children }) => {
 
   // Update a book
   const updateBook = async (bookId, updatedData, coverPhoto) => {
-    setLoading(true);
+    setIsBookPosting(true);
     setError(null);
     const formData = new FormData();
 
@@ -122,14 +111,17 @@ export const BookProvider = ({ children }) => {
       const response = await axiosInstance.put(`/books/${bookId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      setSuccessMessage("Book updated successfully!");
-      console.log(response.data);
+      setStoreBooks((prevBooks) =>
+        prevBooks.map((book) =>
+          book._id === bookId ? response.data.data : book
+        )
+      );
+      return response.data?.data;
+    
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update book.");
       console.error(err);
     } finally {
-      setLoading(false);
+      setIsBookPosting(false);
     }
   };
 
@@ -142,7 +134,6 @@ export const BookProvider = ({ children }) => {
       await axiosInstance.delete(`/books/${bookId}`);
       setStoreBooks(storeBooks.filter((item) => item._id !== bookId));
     } catch (err) {
-      setdeleteError(err.response?.data?.message || "Failed to delete book.");
       console.error(err);
     } finally {
       setIsDeleting(false);
@@ -154,16 +145,12 @@ export const BookProvider = ({ children }) => {
     books,
     loading,
     error,
-    errorMessage,
-    setErrorMessage,
     storeBooks,
     setStoreBooks,
-    successMessage,
     createBook,
     getAllBooks,
     updateBook,
     deleteBook,
-    setSuccessMessage,
     isBookPosting,
     setIsBookPosting,
     isDeleting,

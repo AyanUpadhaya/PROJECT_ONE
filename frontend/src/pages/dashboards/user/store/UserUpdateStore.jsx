@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import BackToPrev from "../../../../components/dashboard/shared/BackToPrev";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useStore from "../../../../hooks/useStore";
 
 const UserUpdateStore = () => {
   const { state } = useLocation();
   const { payload, type } = state || {};
   const { setMystore } = useStore();
+  const navigate = useNavigate();
   // Base URL for the API
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -81,11 +82,12 @@ const UserUpdateStore = () => {
         location: response?.data?.data?.location,
         description: response?.data?.data?.description,
       }));
+      if (response?.data?.data?._id) navigate("/dashboard/user/store");
     } catch (error) {
       setErrorMessage(
         error.response?.data?.message || "Failed to update store."
       );
-      console.error(error);
+      alert(error);
     } finally {
       setLoading(false);
     }

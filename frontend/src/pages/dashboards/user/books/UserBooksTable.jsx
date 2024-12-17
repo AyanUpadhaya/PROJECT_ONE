@@ -31,6 +31,10 @@ const UserBooksTable = ({ data }) => {
         setbtnIndex(null);
       });
   };
+
+  const truncate = (text) => {
+    return text.length > 34 ? text.slice(0, 34) + "..." : text;
+  };
   return (
     <>
       <div className="table-responsive">
@@ -50,8 +54,8 @@ const UserBooksTable = ({ data }) => {
               data.map((book, index) => (
                 <tr key={book._id}>
                   <th scope="row">{index + 1}</th>
-                  <td>{book.title}</td>
-                  <td>{book.author}</td>
+                  <td>{truncate(book.title)}</td>
+                  <td>{truncate(book.author)}</td>
                   <td>{book.category_id?.name || "N/A"}</td>
                   <td>{formatToLocaleDateString(book.createdAt)}</td>
                   <td className="d-flex gap-2 align-items-center">
@@ -62,7 +66,7 @@ const UserBooksTable = ({ data }) => {
                       Details
                     </button>
                     <button
-                      onClick={() => handleNavigate(book, "edit")}
+                      onClick={() => handleNavigate(book, "update")}
                       className="btn btn-primary"
                     >
                       Edit

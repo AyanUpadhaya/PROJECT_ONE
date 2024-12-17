@@ -41,7 +41,9 @@ const createBook = async (req, res) => {
 // Get all books
 const getAllBooks = async (req, res) => {
   try {
-    const books = await Book.find().populate("category_id created_by store_id");
+    const books = await Book.find()
+      .populate("category_id created_by store_id")
+      .sort({ createdAt: -1 });
     res.status(200).json(books);
   } catch (error) {
     res
@@ -55,9 +57,10 @@ const getBooksByStore = async (req, res) => {
   try {
     const { store_id } = req.params;
 
-    const books = await Book.find({ store_id }).populate(
-      "category_id created_by"
-    );
+    const books = await Book.find({ store_id })
+      .populate("category_id created_by")
+      .sort({ createdAt: -1 });
+
     if (books.length === 0) {
       return res.status(404).json({ message: "No books found in this store" });
     }
@@ -74,7 +77,7 @@ const getBooksByStore = async (req, res) => {
 async function updateUtility(book_id, dataObj) {
   const updatedBook = await Book.findByIdAndUpdate(book_id, dataObj, {
     new: true,
-  });
+  }).populate("category_id", "name");
 
   if (!updatedBook) {
     return res.status(404).json({ message: "Book not found" });
@@ -103,6 +106,7 @@ const updateBook = async (req, res) => {
         ...reqBody,
         cover_photo: result,
       });
+
       res
         .status(200)
         .json({ message: "Book updated successfully", data: updatedBook });
