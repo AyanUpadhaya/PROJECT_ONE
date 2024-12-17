@@ -8,15 +8,12 @@ const {
   addReview,
   getSingleBook,
 } = require("./bookController");
-
-
-
-// Middleware for authentication
+const verifyToken = require("../../utils/verifyToken");
 
 const router = express.Router();
 
 // Create a new book
-router.post("/books", createBook); //**
+router.post("/books", verifyToken, createBook); //**
 
 // Get all books
 router.get("/books", getAllBooks); //**
@@ -25,13 +22,13 @@ router.get("/books", getAllBooks); //**
 router.get("/books/store/:store_id", getBooksByStore); //**
 
 // Update book
-router.put("/books/:book_id", updateBook); //**
+router.put("/books/:book_id", verifyToken, updateBook); //**
 
 // Delete book
-router.delete("/books/:book_id", deleteBook); //**
+router.delete("/books/:book_id", verifyToken, deleteBook); //**
 
 // Add review to book
-router.post("/books/review", addReview); //**
+router.post("/books/review", verifyToken, addReview); //**
 
 // Get a single book by its ID
 router.get("/books/:book_id", getSingleBook);

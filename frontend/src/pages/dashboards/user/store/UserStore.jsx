@@ -6,7 +6,7 @@ import useStore from "../../../../hooks/useStore";
 
 const UserStore = () => {
   const { user } = useAuth();
-  const { loading, myStore } = useStore();
+  const { loading, error, myStore } = useStore();
   const navigate = useNavigate();
 
   const NoStore = () => {
@@ -36,6 +36,16 @@ const UserStore = () => {
     ) : (
       <NoStore></NoStore>
     );
+
+   if (error) {
+     return (
+       <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+         <div>
+           <h2>Something went wrong</h2>
+         </div>
+       </div>
+     );
+   }
 
   if (loading) {
     return (

@@ -64,7 +64,11 @@ export default function Sidebar() {
               <Link
                 to={`/dashboard/${role}/books`}
                 className={`nav-link ${isActive(
-                  ["/dashboard/user/books"],
+                  [
+                    "/dashboard/user/books",
+                    "/dashboard/user/books/add",
+                    "/dashboard/user/books/details",
+                  ],
                   location
                 )}`}
                 aria-current="page"

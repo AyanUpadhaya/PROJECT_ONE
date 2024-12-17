@@ -21,6 +21,7 @@ const UserStoreDetails = () => {
         <div className="d-flex flex-column  gap-1 align-items-center">
           <div>
             <h2>{myStore?.name}</h2>
+            <p>{myStore?._id}</p>
           </div>
           <div>
             <img className="img-fluid" src={myStore?.cover_photo} alt="" />
@@ -38,6 +39,7 @@ const UserStoreDetails = () => {
             <div className="d-flex gap-2">
               <div className="card p-3">
                 <div className="card-body">
+                  ro
                   <h3>Likes:{myStore?.liked_by.length}</h3>
                 </div>
               </div>

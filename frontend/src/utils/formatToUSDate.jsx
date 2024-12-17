@@ -8,7 +8,8 @@ export function formatToUSDate(dateString) {
     month: "2-digit",
     day: "2-digit",
   });
-
+  // new Date(book.createdAt).toLocaleDateString();
+  
   return formattedDate;
 }
 

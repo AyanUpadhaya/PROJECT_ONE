@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 const BackToPrev = ({ path, className,title }) => {
   return (
     <div className={`mb-6 max-w-max  h-full ${className}`}>
-      <Link to={path} className={`d-flex align-items-center gap-2`}>
+      <Link
+        to={path}
+        className={`d-flex align-items-center gap-2 text-decoration-none`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="28"
@@ -17,7 +20,9 @@ const BackToPrev = ({ path, className,title }) => {
             fill="#303030"
           />
         </svg>
-        <span className={`fw-bold text-dark text-decoration-none`}>{title}</span>
+        <span className={`fw-bold text-dark text-lg`}>
+          {title}
+        </span>
       </Link>
     </div>
   );

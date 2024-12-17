@@ -32,6 +32,8 @@ import UserStoreOrders from "../pages/dashboards/user/orders/UserStoreOrders";
 import UserSettings from "../pages/dashboards/user/settings/UserSettings";
 import { StoreProvider } from "../context/StoreContext";
 import UserStoreDetails from "../pages/dashboards/user/store/UserStoreDetails";
+import { BookProvider } from "../context/BookContext";
+import BookDetails from "../pages/dashboards/user/books/BookDetails";
 
 const router = createBrowserRouter([
   //website
@@ -153,15 +155,35 @@ const router = createBrowserRouter([
           // books
           {
             path: "books",
-            element: <UserBooks></UserBooks>,
+            element: (
+              <BookProvider>
+                <UserBooks></UserBooks>,
+              </BookProvider>
+            ),
           },
           {
             path: "books/add",
-            element: <UserAddBooks></UserAddBooks>,
+            element: (
+              <BookProvider>
+                <UserAddBooks></UserAddBooks>,
+              </BookProvider>
+            ),
           },
           {
             path: "books/update",
-            element: <UserUpdateBooks></UserUpdateBooks>,
+            element: (
+              <BookProvider>
+                <UserUpdateBooks></UserUpdateBooks>,
+              </BookProvider>
+            ),
+          },
+          {
+            path: "books/details",
+            element: (
+              <BookProvider>
+                <BookDetails></BookDetails>,
+              </BookProvider>
+            ),
           },
           // user purchase history
           {
