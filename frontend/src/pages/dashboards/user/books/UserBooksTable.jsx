@@ -1,9 +1,12 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import formatToLocaleDateString from '../../../../utils/formatToLocaleDateString';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import formatToLocaleDateString from "../../../../utils/formatToLocaleDateString";
+import useBooks from "../../../../hooks/useBooks";
 
-const UserBooksTable = ({data}) => {
+const UserBooksTable = ({ data }) => {
   const navigate = useNavigate();
+  const { isDeleting, deleteBook, deleteError } = useBooks();
+  const [btnIndex, setbtnIndex] = useState(null);
 
   const handleNavigate = (item, path) => {
     navigate(`${path}`, {
@@ -12,6 +15,21 @@ const UserBooksTable = ({data}) => {
         type: "edit",
       },
     });
+  };
+
+  const handleDelete = (id, idx) => {
+    setbtnIndex(idx);
+    deleteBook(id)
+      .then(() => {
+        alert("Book is deleted");
+        return;
+      })
+      .catch((error) => {
+        alert(error?.message);
+      })
+      .finally(() => {
+        setbtnIndex(null);
+      });
   };
   return (
     <>
@@ -50,9 +68,15 @@ const UserBooksTable = ({data}) => {
                       Edit
                     </button>
                     <button
+                      onClick={() => {
+                        handleDelete(book._id, index);
+                      }}
+                      disabled={isDeleting && btnIndex == index}
                       className="btn btn-danger"
                     >
-                      Delete
+                      {isDeleting && btnIndex == index
+                        ? "Deleting..."
+                        : "Delete"}
                     </button>
                   </td>
                 </tr>
@@ -69,6 +93,6 @@ const UserBooksTable = ({data}) => {
       </div>
     </>
   );
-}
+};
 
-export default UserBooksTable
+export default UserBooksTable;

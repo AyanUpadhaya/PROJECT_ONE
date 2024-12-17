@@ -19,9 +19,16 @@ const createBook = async (req, res) => {
     await newBook.save();
     store.book_ids.push(newBook._id);
 
-    res
-      .status(201)
-      .json({ message: "Book created successfully", data: newBook });
+    // Populate the category_id field
+    const populatedBook = await Book.findById(newBook._id).populate(
+      "category_id",
+      "name" 
+    );
+
+    res.status(201).json({
+      message: "Book created successfully",
+      data: populatedBook,
+    });
   } catch (error) {
     res
       .status(500)

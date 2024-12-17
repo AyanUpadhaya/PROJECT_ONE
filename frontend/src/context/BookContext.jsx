@@ -8,7 +8,9 @@ export const BookContext = createContext(null);
 export const BookProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [isBookPosting, setIsBookPosting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
+  const [deleteError, setdeleteError] = useState(null);
   const [books, setBooks] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -133,17 +135,17 @@ export const BookProvider = ({ children }) => {
 
   // Delete a book
   const deleteBook = async (bookId) => {
-    setLoading(true);
-    setError(null);
+    setIsDeleting(true);
+    setdeleteError(null);
 
     try {
       await axiosInstance.delete(`/books/${bookId}`);
-      setSuccessMessage("Book deleted successfully!");
+      setStoreBooks(storeBooks.filter((item) => item._id !== bookId));
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete book.");
+      setdeleteError(err.response?.data?.message || "Failed to delete book.");
       console.error(err);
     } finally {
-      setLoading(false);
+      setIsDeleting(false);
     }
   };
 
@@ -164,6 +166,9 @@ export const BookProvider = ({ children }) => {
     setSuccessMessage,
     isBookPosting,
     setIsBookPosting,
+    isDeleting,
+    setIsDeleting,
+    deleteError,
   };
 
   useEffect(() => {
