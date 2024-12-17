@@ -6,6 +6,28 @@ import useCategories from "../../../../hooks/useCategories";
 const AdminCategorys = () => {
   const navigate = useNavigate();
   const { categories, loading, error } = useCategories();
+
+   if (error) {
+     return (
+       <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+         <div>
+           <h2>Something went wrong</h2>
+         </div>
+       </div>
+     );
+   }
+
+   if (loading) {
+     return (
+       <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+         <div>
+           <h2>Loading...</h2>
+         </div>
+       </div>
+     );
+   }
+
+
   return (
     <div className="w-100 h-100">
       <div className="d-flex flex-column justify-content-between gap-3 ">

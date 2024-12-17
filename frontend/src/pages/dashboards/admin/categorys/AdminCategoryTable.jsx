@@ -37,7 +37,7 @@ const AdminCategoryTable = ({ navigate, data }) => {
           </tr>
         </thead>
         <tbody>
-          {data &&
+          {data && data.length > 0 ? (
             data.map((item, idx) => (
               <tr key={item?._id}>
                 <th scope="row">{idx + 1}</th>
@@ -59,7 +59,16 @@ const AdminCategoryTable = ({ navigate, data }) => {
                   </button>
                 </td>
               </tr>
-            ))}
+            ))
+          ) : (
+            <>
+              <tr>
+                <td colSpan="7" className="text-center">
+                  No category found.
+                </td>
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
     </>

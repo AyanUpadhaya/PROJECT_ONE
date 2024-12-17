@@ -17,12 +17,14 @@ const createBook = async (req, res) => {
 
     // Save the new book
     await newBook.save();
+    console.log(newBook._id);
     store.book_ids.push(newBook._id);
+    await store.save();
 
     // Populate the category_id field
     const populatedBook = await Book.findById(newBook._id).populate(
       "category_id",
-      "name" 
+      "name"
     );
 
     res.status(201).json({
@@ -35,7 +37,6 @@ const createBook = async (req, res) => {
       .json({ message: "Failed to create book", error: error.message });
   }
 };
-
 
 // Get all books
 const getAllBooks = async (req, res) => {
