@@ -1,18 +1,14 @@
 export function formatToUSDate(dateString) {
-  try {
-    const date = new Date(dateString); 
-    if (isNaN(date)) {
-      throw new Error("Invalid date string");
-    }
+  // Create a Date object from the ISO 8601 formatted string
+  const date = new Date(dateString);
 
-    // Format options
-    const options = { year: "numeric", month: "short", day: "numeric" };
+  // Format the date using toLocaleDateString with 'en-US' locale
+  const formattedDate = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
 
-    // Convert to US format using Intl.DateTimeFormat
-    return new Intl.DateTimeFormat("en-US", options).format(date);
-  } catch (error) {
-    console.error(error.message);
-    return null; 
-  }
+  return formattedDate;
 }
 

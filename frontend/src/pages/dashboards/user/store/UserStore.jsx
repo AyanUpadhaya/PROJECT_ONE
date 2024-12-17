@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserStoreTable from "./UserStoreTable";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import useStore from "../../../../hooks/useStore";
 
 const UserStore = () => {
   const { user } = useAuth();
+  const { loading, myStore } = useStore();
   const navigate = useNavigate();
 
   const NoStore = () => {
@@ -30,10 +32,18 @@ const UserStore = () => {
 
   const content =
     user?.is_store_owner && user?.store_id ? (
-      <UserStoreTable></UserStoreTable>
+      <UserStoreTable data={myStore}></UserStoreTable>
     ) : (
       <NoStore></NoStore>
     );
+
+  if (loading) {
+    return (
+      <div className="w-100 h-100">
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
   return (
     <div className="w-100 h-100">
       <div className="d-flex flex-column justify-content-between gap-3 ">

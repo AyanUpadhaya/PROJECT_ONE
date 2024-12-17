@@ -30,6 +30,8 @@ import UserAddStore from "../pages/dashboards/user/store/UserAddStore";
 import UserUpdateStore from "../pages/dashboards/user/store/UserUpdateStore";
 import UserStoreOrders from "../pages/dashboards/user/orders/UserStoreOrders";
 import UserSettings from "../pages/dashboards/user/settings/UserSettings";
+import { StoreProvider } from "../context/StoreContext";
+import UserStoreDetails from "../pages/dashboards/user/store/UserStoreDetails";
 
 const router = createBrowserRouter([
   //website
@@ -98,7 +100,11 @@ const router = createBrowserRouter([
           },
           {
             path: "stores",
-            element: <AdminStores></AdminStores>,
+            element: (
+              <StoreProvider>
+                <AdminStores></AdminStores>
+              </StoreProvider>
+            ),
           },
           {
             path: "categorys",
@@ -165,7 +171,19 @@ const router = createBrowserRouter([
           // store
           {
             path: "store",
-            element: <UserStore></UserStore>,
+            element: (
+              <StoreProvider>
+                <UserStore></UserStore>
+              </StoreProvider>
+            ),
+          },
+          {
+            path: "store/details",
+            element: (
+              <StoreProvider>
+                <UserStoreDetails></UserStoreDetails>
+              </StoreProvider>
+            ),
           },
           {
             path: "store/add",
@@ -173,7 +191,11 @@ const router = createBrowserRouter([
           },
           {
             path: "store/update",
-            element: <UserUpdateStore></UserUpdateStore>,
+            element: (
+              <StoreProvider>
+                <UserUpdateStore></UserUpdateStore>
+              </StoreProvider>
+            ),
           },
           // store orders
           {

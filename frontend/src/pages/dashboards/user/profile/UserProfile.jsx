@@ -33,7 +33,7 @@ function UserProfile() {
                     <>
                       <img
                         src={user?.photoUrl}
-                        class="card-img-top rounded object-cover"
+                        className="card-img-top rounded object-cover"
                       />
                     </>
                   ) : (

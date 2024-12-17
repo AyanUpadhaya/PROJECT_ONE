@@ -56,7 +56,7 @@ const UserAddStore = () => {
     );
 
     try {
-      setLoading(false);
+      setLoading(true);
       const response = await axiosInstance.post(`/stores`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

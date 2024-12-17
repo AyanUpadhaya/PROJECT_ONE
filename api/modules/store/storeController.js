@@ -1,5 +1,6 @@
 const Store = require("./Store");
 const User = require("../user/User");
+const uploadToCloudinary = require("../../utils/uploadToCloudinary");
 
 // Create a new store
 const createStore = async (req, res) => {
@@ -22,10 +23,12 @@ const createStore = async (req, res) => {
       description,
       created_by,
     });
-    if (user.is_store_owner){
-      return res.status(400).json({message:"You already have a store",data:user})
+    if (user.is_store_owner) {
+      return res
+        .status(400)
+        .json({ message: "You already have a store", data: user });
     }
-      // Update the user's `store_id`
+    // Update the user's `store_id`
     user.store_id = store._id;
     user.is_store_owner = true; // Ensure this is set to true
     await user.save();
@@ -38,22 +41,6 @@ const createStore = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to create store.", error: error.message });
-  }
-};
-
-const testRouteController = async (req, res) => {
-  try {
-    // Check if required form data exists (if applicable)
-    if (!req.body.data) {
-      return res.status(400).send("Missing required data field: data");
-    }
-
-    const reqBody = JSON.parse(req?.body?.data);
-    console.log(reqBody);
-    res.send("Ok");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -130,7 +117,9 @@ const deleteStore = async (req, res) => {
 // Get all stores created by the user
 const getUserStores = async (req, res) => {
   try {
-    const stores = await Store.find({ created_by: req.user._id });
+    const { userId } = req.params;
+
+    const stores = await Store.find({ created_by: userId });
 
     if (stores.length === 0) {
       return res
@@ -140,7 +129,7 @@ const getUserStores = async (req, res) => {
 
     res.status(200).json({
       message: "Stores fetched successfully.",
-      stores,
+      data: stores,
     });
   } catch (error) {
     res
@@ -153,7 +142,7 @@ const getUserStores = async (req, res) => {
 const updateStore = async (req, res) => {
   try {
     const storeId = req.params.id;
-    const reqBody = req.body;
+    const reqBody = JSON.parse(req.body.data);
 
     // Find the store by ID
     const store = await Store.findById(storeId);
@@ -181,6 +170,26 @@ const updateStore = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to update store.", error: error.message });
+  }
+};
+
+const updateCoverPicture = async (req, res) => {
+  const storeId = req.params.id;
+  try {
+    // Find the store by ID
+    const [result, fileName] = await uploadToCloudinary(req);
+    const newData = { cover_photo: result };
+    const updatedStore = await Store.findByIdAndUpdate(storeId, newData, {
+      new: true,
+    });
+    if (!updatedStore) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Picture updated successfully", data: updatedStore });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -228,5 +237,5 @@ module.exports = {
   getUserStores,
   updateStore,
   toggleLikeStore,
-  testRouteController,
+  updateCoverPicture,
 };
