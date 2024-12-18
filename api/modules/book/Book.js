@@ -26,18 +26,7 @@ const bookSchema = new mongoose.Schema(
     qty: { type: Number, required: true },
     price: { type: Number, required: true },
     sell_price: { type: Number, required: true },
-    reviews: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-        review: {
-          type: String,
-          required:true
-        },
-      },
-    ],
+   
     tags: [{ type: String }],
   },
   { timestamps: true }

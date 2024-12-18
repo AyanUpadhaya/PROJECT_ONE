@@ -15,7 +15,7 @@ const storeSchema = new mongoose.Schema(
       type: String,
       default: "https://iili.io/2XG1fN2.jpg",
     },
-    liked_by: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    
   },
   { timestamps: true }
 );
