@@ -34,7 +34,7 @@ const AdminStoreTable = ({ data }) => {
               <>
                 <tr>
                   <td colSpan="7" className="text-center">
-                    No category found.
+                    No store found.
                   </td>
                 </tr>
               </>

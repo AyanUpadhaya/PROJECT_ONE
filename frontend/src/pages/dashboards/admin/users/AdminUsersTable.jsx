@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const AdminUsersTable = ({ users }) => {
   return (
@@ -14,19 +14,29 @@ const AdminUsersTable = ({ users }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>{user.phone || "N/A"}</td>
-              <td>{user.address || "N/A"}</td>
-            </tr>
-          ))}
+          {users.length > 0 ? (
+            users.map((user) => (
+              <tr key={user._id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>{user.phone || "N/A"}</td>
+                <td>{user.address || "N/A"}</td>
+              </tr>
+            ))
+          ) : (
+            <>
+              <tr>
+                <td colSpan="7" className="text-center">
+                  No users found.
+                </td>
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
     </div>
   );
 };
 
-export default AdminUsersTable
+export default AdminUsersTable;

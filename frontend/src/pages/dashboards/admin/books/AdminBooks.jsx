@@ -31,7 +31,7 @@ const AdminBooks = () => {
         {/* head */}
         <div className="d-flex justify-content-between gap-3 align-items-center">
           <div>
-            <h2>Books {books.length}</h2>
+            <h2>Books</h2>
           </div>
         </div>
         {/* table */}

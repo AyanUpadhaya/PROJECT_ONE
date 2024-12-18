@@ -29,7 +29,7 @@ const AdminStores = () => {
         {/* head */}
         <div className="d-flex justify-content-between gap-3 align-items-center">
           <div>
-            <h2>Store {stores?.length}</h2>
+            <h2>Store</h2>
           </div>
         </div>
         {/* table */}
