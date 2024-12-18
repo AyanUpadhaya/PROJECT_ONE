@@ -24,7 +24,8 @@ const BookRow = ({ book, onQuantityChange, handleRemoveBook }) => {
                 <span className="text-muted">Category:</span>{" "}
                 {book.category_id.name}
                 <br />
-                <span className="text-muted">In Stock:</span> {book.qty}
+                <span className="text-muted">In Stock:</span>{" "}
+                {book.qty - book.userQty}
               </small>
             </div>
           </div>

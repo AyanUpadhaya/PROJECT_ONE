@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 
@@ -10,6 +10,9 @@ function Login() {
     password: "",
   });
   let navigate = useNavigate();
+  const location = useLocation();
+  let from = location.state?.from?.pathname || `/dashboard`;
+  console.log(from);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +23,7 @@ function Login() {
     try {
       setLoading(true);
       await login(formData);
-      navigate("/dashboard");
+      navigate(from, { replace: true });
     } catch (error) {
       alert(`${error?.message || "Login failed"}`);
       console.log(error?.message || "something went wrong");
@@ -29,9 +32,10 @@ function Login() {
     }
   };
 
-  let checkValidation = formData.password == "" || formData.email == "" || loding;
+  let checkValidation =
+    formData.password == "" || formData.email == "" || loding;
 
-  if (isAuthenticated) return <Navigate to={`/dashboard/${user?.role}`} />;
+  if (isAuthenticated) return <Navigate to={from} replace />;
 
   return (
     <div className="py-2">
@@ -68,7 +72,7 @@ function Login() {
           type="submit"
           className="btn btn-primary"
         >
-          {loding?"Loading...":"Submit"}
+          {loding ? "Loading..." : "Submit"}
         </button>
       </form>
     </div>

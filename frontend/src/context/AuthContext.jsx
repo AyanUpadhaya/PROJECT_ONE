@@ -4,7 +4,6 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // User state
-
   // Function to save user data in local storage
   const saveUserToLocalStorage = (userData) => {
     localStorage.setItem("buchhandlung_auth", JSON.stringify(userData));

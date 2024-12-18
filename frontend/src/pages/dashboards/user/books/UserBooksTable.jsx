@@ -45,6 +45,7 @@ const UserBooksTable = ({ data }) => {
               <th scope="col">Book Name</th>
               <th scope="col">Author</th>
               <th scope="col">Category</th>
+              <th scope="col">In stock</th>
               <th scope="col">Created At</th>
               <th scope="col">Action</th>
             </tr>
@@ -54,10 +55,11 @@ const UserBooksTable = ({ data }) => {
               data.map((book, index) => (
                 <tr key={book._id}>
                   <th scope="row">{index + 1}</th>
-                  <td>{truncate(book.title)}</td>
-                  <td>{truncate(book.author)}</td>
-                  <td>{book.category_id?.name || "N/A"}</td>
-                  <td>{formatToLocaleDateString(book.createdAt)}</td>
+                  <td>{truncate(book?.title)}</td>
+                  <td>{truncate(book?.author)}</td>
+                  <td>{book?.category_id?.name || "N/A"}</td>
+                  <td>{book?.qty || "N/A"}</td>
+                  <td>{formatToLocaleDateString(book?.createdAt)}</td>
                   <td className="d-flex gap-2 align-items-center">
                     <button
                       onClick={() => handleNavigate(book, "details")}
