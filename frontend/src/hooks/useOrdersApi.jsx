@@ -8,6 +8,7 @@ const useOrdersApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+
   // Base URL for the API
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -61,53 +62,7 @@ const useOrdersApi = () => {
     }
   };
 
-  // Update order status
-  const updateOrderStatus = async (id, status) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axiosInstance.patch(`/orders/${id}`, { status });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === id
-            ? { ...order, status: response.data.data?.order.status }
-            : order
-        )
-      );
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update order");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Delete an order
-  const deleteOrder = async (id) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await axiosInstance.delete(`/orders/${id}`);
-      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== id));
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete order");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Fetch orders by store
-  const fetchOrdersByStore = async (storeId) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axiosInstance.get(`/orders/store/${storeId}`);
-      setOrders(response.data.data);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch orders.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   // Fetch orders for the logged-in user
   const fetchUserOrders = async (userId) => {
@@ -132,11 +87,9 @@ const useOrdersApi = () => {
     error,
     fetchOrders,
     fetchOrderById,
-    createOrder,
-    updateOrderStatus,
-    deleteOrder,
+    createOrder,  
     fetchUserOrders,
-    fetchOrdersByStore,
+ 
   };
 };
 

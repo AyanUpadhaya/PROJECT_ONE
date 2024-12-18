@@ -7,7 +7,6 @@ const UserPurchase = () => {
   const { user } = useLoadUser();
   const { fetchUserOrders, loading, error, orders } = useOrdersApi();
 
-
   useEffect(() => {
     fetchUserOrders(user._id)
     
@@ -17,7 +16,7 @@ const UserPurchase = () => {
     return (
       <div className="w-100 h-100 d-flex justify-content-center align-items-center">
         <div>
-          <h2>Something went wrong</h2>
+          <h2>{error || "Something went wrong"}</h2>
         </div>
       </div>
     );

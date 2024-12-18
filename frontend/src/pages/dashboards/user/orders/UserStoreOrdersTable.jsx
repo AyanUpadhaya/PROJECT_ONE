@@ -1,34 +1,88 @@
-import React from 'react'
+import React from "react";
+import useOrders from "../../../../hooks/useOrders";
 
-const UserStoreOrdersTable = () => {
- return (
-   <>
-     <table className="table table-striped">
-       <thead>
-         <tr>
-           <th scope="col">#</th>
-           <th scope="col">Book Name</th>
-           <th scope="col">Author</th>
-           <th scope="col">Store</th>
-           <th scope="col">Created At</th>
-           <th scope="col">Action</th>
-         </tr>
-       </thead>
-       <tbody>
-         <tr>
-           <th scope="row">1</th>
-           <td>Feluda Somogro</td>
-           <td>Satyajit Roy</td>
-           <td>Brindabon</td>
-           <td>Dec 16, 2024</td>
-           <td className="d-flex gap-2 align-items-center">
-             <button className="btn btn-primary">View Details</button>
-           </td>
-         </tr>
-       </tbody>
-     </table>
-   </>
- );
-}
+const UserStoreOrdersTable = ({ orders }) => {
+  const { updateOrderStatus, error, statusUpdating } = useOrders();
 
-export default UserStoreOrdersTable
+  const handleStatusUpdate = (id, status) => {
+    updateOrderStatus(id, status);
+  };
+
+  return (
+    <div>
+      <div className="table-responsive">
+        <table className="table table-bordered table-striped">
+          <thead className="table-dark">
+            <tr>
+              <th>Order ID</th>
+              <th>Customer Name</th>
+              <th>Books Ordered</th>
+              <th>Total Price</th>
+              <th>Status</th>
+              <th>Payment Method</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) =>
+              order.stores.map((store) => (
+                <tr key={`${order._id}-${store._id}`}>
+                  <td>{order._id}</td>
+                  <td>{order.order_by.name}</td>
+                  <td>
+                    {store.books.map((book) => (
+                      <div key={book.book_id._id}>
+                        <strong>Title:</strong> {book.book_id.title}
+                        <br />
+                        <strong>Quantity:</strong> {book.qty}
+                        <br />
+                        <strong>Price:</strong> ${book.price}
+                        <hr />
+                      </div>
+                    ))}
+                  </td>
+                  <td>${store.total_price}</td>
+                  <td>{order.status}</td>
+                  <td>{order.payment_method}</td>
+                  <td>{new Date(order.date).toLocaleString()}</td>
+                  <td className="d-flex flex-column gap-1">
+                    <button
+                      disabled={
+                        order.status == "completed" ||
+                        order.status == "cancelled" ||
+                        statusUpdating
+                      }
+                      onClick={() =>
+                        handleStatusUpdate(order?._id, "completed")
+                      }
+                      className="btn btn-sm btn-dark"
+                    >
+                      Complete
+                    </button>
+                    <br />
+                    <button
+                      disabled={
+                        order.status == "completed" ||
+                        order.status == "cancelled" ||
+                        statusUpdating
+                      }
+                      onClick={() =>
+                        handleStatusUpdate(order?._id, "cancelled")
+                      }
+                      className="btn btn-sm btn-danger"
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default UserStoreOrdersTable;

@@ -21,7 +21,7 @@ router.get("/orders", verifyToken, getAllOrders); //**
 router.get("/orders/:id", verifyToken, getOrderById);
 
 // Update order status (for pending/completed status)
-router.put("/orders/:id/status", verifyToken, updateOrderStatus); //**
+router.patch("/orders/status/:orderId", verifyToken, updateOrderStatus); //**
 
 // Get orders by store ID (for the user's own store)
 router.get("/orders/store/:storeId", verifyToken, getOrdersByStore); //**

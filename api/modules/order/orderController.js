@@ -13,13 +13,11 @@ const createOrder = async (req, res) => {
       let storeTotalPrice = 0;
       for (const book of store.books) {
         const bookData = await Book.findById(book.book_id);
-  
+
         if (book.qty > bookData.qty) {
-          return res
-            .status(400)
-            .json({
-              message: `Insufficient stock for book: ${bookData.title}`,
-            });
+          return res.status(400).json({
+            message: `Insufficient stock for book: ${bookData.title}`,
+          });
         }
 
         // Deduct stock
@@ -29,7 +27,7 @@ const createOrder = async (req, res) => {
         storeTotalPrice += book.qty * book.price;
       }
       store.total_price = storeTotalPrice; // Add total price
-      overallTotalPrice += storeTotalPrice; // Update overall 
+      overallTotalPrice += storeTotalPrice; // Update overall
     }
 
     // Create the order
@@ -41,7 +39,7 @@ const createOrder = async (req, res) => {
     });
 
     await newOrder.save();
-  
+
     res
       .status(201)
       .json({ message: "Order placed successfully", data: newOrder });
@@ -56,17 +54,19 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate('order_by', 'name email')  // Populate the user who ordered
-      .populate('book_id', 'title author')  // Populate the book details
-      .populate('store_id', 'name');  // Populate the store details
+      .populate("order_by", "name email") // Populate the user who ordered
+      .populate("book_id", "title author") // Populate the book details
+      .populate("store_id", "name"); // Populate the store details
 
     if (orders.length === 0) {
-      return res.status(404).json({ message: 'No orders found.' });
+      return res.status(404).json({ message: "No orders found." });
     }
 
     res.status(200).json(orders);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch orders.', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch orders.", error: error.message });
   }
 };
 
@@ -84,7 +84,7 @@ const getOrderById = async (req, res) => {
 
     res.status(200).json({
       message: "Order fetched successfully.",
-      data:order,
+      data: order,
     });
   } catch (error) {
     res
@@ -93,11 +93,10 @@ const getOrderById = async (req, res) => {
   }
 };
 
-
 // Update order status
 const updateOrderStatus = async (req, res) => {
   try {
-    const orderId = req.params.id;
+    const { orderId } = req.params;
     const { status } = req.body;
 
     if (!["pending", "completed", "cancelled"].includes(status)) {
@@ -105,27 +104,37 @@ const updateOrderStatus = async (req, res) => {
     }
 
     // Find and update the order
-    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
 
     if (!order) {
-      return res.status(404).json({ message: 'Order not found.' });
+      return res.status(404).json({ message: "Order not found." });
     }
 
     res.status(200).json({
-      message: 'Order status updated successfully.',
-      data:order,
+      message: "Order status updated successfully.",
+      data: order,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to update order status.', error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Failed to update order status.",
+        error: error.message,
+      });
   }
 };
 
 // Get orders -  allow store owners to see their orders
 const getOrdersByStore = async (req, res) => {
   try {
-    const { store_id } = req.params;
+    const { storeId } = req.params;
 
-    const orders = await Order.find({ "stores.store_id": store_id })
+    // Find orders for the given store
+    const orders = await Order.find({ "stores.store_id": storeId })
       .populate("order_by", "name email")
       .populate("stores.books.book_id", "title author");
 
@@ -135,8 +144,9 @@ const getOrdersByStore = async (req, res) => {
         .json({ message: "No orders found for this store" });
     }
 
-    res.status(200).json({ data:orders });
+    res.status(200).json({ data: orders });
   } catch (error) {
+    console.error("Error fetching orders:", error); // Debug log
     res
       .status(500)
       .json({ message: "Failed to fetch orders", error: error.message });
@@ -145,26 +155,25 @@ const getOrdersByStore = async (req, res) => {
 
 // Controller to get orders for the logged-in user
 const getUserOrders = async (req, res) => {
-  const userId = req.user._id; 
+  const userId = req.user._id;
   try {
-
     const orders = await Order.find({ order_by: userId })
-      .populate("order_by", "name email") 
+      .populate("order_by", "name email")
       .populate("stores.store_id", "name address")
-      .populate("stores.books.book_id", "title author") 
-      .sort({ createdAt: -1 }); 
+      .populate("stores.books.book_id", "title author")
+      .sort({ createdAt: -1 });
 
     if (!orders || orders.length === 0) {
       return res.status(404).json({ message: "No orders found." });
     }
 
-    res.status(200).json({ success: true, data:orders });
+    res.status(200).json({ success: true, data: orders });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server Error", error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
   }
 };
-
-
 
 module.exports = {
   createOrder,

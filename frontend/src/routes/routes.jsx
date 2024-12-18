@@ -37,6 +37,7 @@ import BookDetails from "../pages/dashboards/user/books/BookDetails";
 import PublicBookDetails from "../pages/bookdetails/PublicBookDetails";
 import { CartProvider } from "../context/CartContext";
 import LoginRoute from "./LoginRoute";
+import { OrderProvider } from "../context/OrderContext";
 
 const router = createBrowserRouter([
   //website
@@ -237,7 +238,11 @@ const router = createBrowserRouter([
           // store orders
           {
             path: "orders",
-            element: <UserStoreOrders></UserStoreOrders>,
+            element: (
+              <OrderProvider>
+                <UserStoreOrders></UserStoreOrders>
+              </OrderProvider>
+            ),
           },
           //settings
           {
