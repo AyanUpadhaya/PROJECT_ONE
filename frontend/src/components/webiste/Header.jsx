@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import useCart from "../../hooks/useCart";
 
 function Header() {
   const { isAuthenticated, logout } = useAuth();
+  const { cart, addToCart } = useCart();
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -65,7 +67,7 @@ function Header() {
                   className="btn btn-success"
                   aria-current="page"
                 >
-                  Cart
+                  Shopping Cart {cart && cart?.length}
                 </Link>
               </li>
             </ul>

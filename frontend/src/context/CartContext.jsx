@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
-
+import axios from "axios";
+import { getToken } from "../utils/getToken";
 // Create the context
 export const CartContext = createContext();
 
@@ -7,7 +8,17 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  // Load cart from localStorage when the component mounts
+  // Base URL for the API
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  // Load cart from localStorage
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
@@ -15,19 +26,19 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  // Add a book ID to the cart
+  // Add a book ID
   const addToCart = (bookId) => {
     if (!cart.includes(bookId)) {
       setCart((prevCart) => [...prevCart, bookId]);
     }
   };
 
-  // Remove a book ID from the cart
+  // Remove a book ID
   const removeFromCart = (bookId) => {
     setCart((prevCart) => prevCart.filter((id) => id !== bookId));
   };
@@ -43,8 +54,8 @@ export const CartProvider = ({ children }) => {
   // Fetch books data based on IDs in the cart
   const fetchBooksFromCart = async () => {
     try {
-      const response = await fetch("/api/books"); // Replace with your actual API endpoint
-      const books = await response.json();
+      const response = await axiosInstance.get("/books");
+      const books = response.data;
       return books.filter((book) => cart.includes(book._id));
     } catch (error) {
       console.error("Failed to fetch books:", error);

@@ -35,12 +35,17 @@ import UserStoreDetails from "../pages/dashboards/user/store/UserStoreDetails";
 import { BookProvider } from "../context/BookContext";
 import BookDetails from "../pages/dashboards/user/books/BookDetails";
 import PublicBookDetails from "../pages/bookdetails/PublicBookDetails";
+import { CartProvider } from "../context/CartContext";
 
 const router = createBrowserRouter([
   //website
   {
     path: "/",
-    element: <WebsiteLayout></WebsiteLayout>,
+    element: (
+      <CartProvider>
+        <WebsiteLayout></WebsiteLayout>
+      </CartProvider>
+    ),
     children: [
       {
         path: "",

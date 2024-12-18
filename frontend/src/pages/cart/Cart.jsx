@@ -1,6 +1,45 @@
-import React from "react";
-import "./Cart.css"
+import React, { useEffect, useState } from "react";
+import "./Cart.css";
+import useCart from "../../hooks/useCart";
+import BookRow from "./BookRow";
+
 function Cart() {
+  const { fetchBooksFromCart } = useCart();
+  const [cartBooks, setCartBooks] = useState([]);
+
+  useEffect(() => {
+    const loadCartBooks = async () => {
+      const books = await fetchBooksFromCart();
+      // Add a default userQty field with value 1 for each book
+      const updatedBooks = books.map((book) => ({
+        ...book,
+        userQty: 1, // Default quantity for each book
+      }));
+      setCartBooks(updatedBooks);
+    };
+    loadCartBooks();
+  }, [fetchBooksFromCart]);
+
+  const handleQuantityChange = (id, newQty) => {
+    setCartBooks((prevBooks) =>
+      prevBooks.map((book) =>
+        book._id === id
+          ? { ...book, userQty: Math.max(1, Math.min(newQty, book.qty)) }
+          : book
+      )
+    );
+  };
+
+  const calculateTotalPrice = () => {
+    return cartBooks
+      .reduce((total, book) => total + book.sell_price * book.userQty, 0)
+      .toFixed(2);
+  };
+  const handleRemoveBook = (bookId) => {
+    // Implement remove functionality here
+    console.log(`Remove book with ID: ${bookId}`);
+  };
+
   return (
     <div className="py-2">
       <div className="card">
@@ -26,7 +65,7 @@ function Cart() {
                   </th>
                   <th
                     className="text-center py-3 px-4"
-                    style={{ width: "120px" }}
+                    style={{ width: "160px" }}
                   >
                     Quantity
                   </th>
@@ -40,122 +79,82 @@ function Cart() {
                     className="text-center align-middle py-3 px-0"
                     style={{ width: "40px" }}
                   >
-                    <a
-                      href="#"
-                      className="shop-tooltip float-none text-light"
-                      title="Clear cart"
-                    >
-                      <i className="ino ion-md-trash"></i>
-                    </a>
+                    Action
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {/* Product Row 1 */}
-                <tr>
-                  <td className="p-4">
-                    <div className="media align-items-center">
-                      <img
-                        src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                        className="d-block ui-w-40 ui-bordered mr-4"
-                        alt=""
-                      />
-                      <div className="media-body">
-                        <a href="#" className="d-block text-dark">
-                          Product 1
-                        </a>
-                        <small>
-                          <span className="text-muted">Color:</span>
-                          <span
-                            className="ui-product-color ui-product-color-sm align-text-bottom"
-                            style={{ background: "#e81e2c" }}
-                          ></span>{" "}
-                          &nbsp;
-                          <span className="text-muted">Size: </span> EU 37
-                          &nbsp;
-                          <span className="text-muted">Ships from: </span> China
-                        </small>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-right font-weight-semibold align-middle p-4">
-                    $57.55
-                  </td>
-                  <td className="align-middle p-4">
-                    <input
-                      type="text"
-                      className="form-control text-center"
-                      defaultValue="2"
-                    />
-                  </td>
-                  <td className="text-right font-weight-semibold align-middle p-4">
-                    $115.1
-                  </td>
-                  <td className="text-center align-middle px-0">
-                    <a
-                      href="#"
-                      className="shop-tooltip close float-none text-danger"
-                      title="Remove"
-                    >
-                      ×
-                    </a>
-                  </td>
-                </tr>
+                {cartBooks.length > 0 ? (
+                  cartBooks.map((book) => (
+                    <BookRow
+                      key={book._id}
+                      onQuantityChange={handleQuantityChange}
+                      book={book}
+                    ></BookRow>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center p-4">
+                      Your cart is empty.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
 
-          <div className="d-flex flex-wrap justify-content-between align-items-center pb-4">
-            
-            <div className="d-flex">
-              
+          {cartBooks.length > 0 && (
+            <div className="d-flex flex-wrap justify-content-between align-items-center pb-4">
               <div className="text-right mt-4">
                 <label className="text-muted font-weight-normal m-0">
                   Total price
                 </label>
                 <div className="text-large">
-                  <strong>$1164.65</strong>
+                  <strong>${calculateTotalPrice()}</strong>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="float-right">
-            <div className="mb-3">
-              <label className="text-muted font-weight-normal">
-                Select Payment Method:
-              </label>
-              <div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="paymentMethod"
-                    id="pickup"
-                    value="pickup"
-                  />
-                  <label className="form-check-label" htmlFor="pickup">
-                    Pickup
+              <div className="float-right">
+                <div className="mb-3">
+                  <label className="text-muted font-weight-normal">
+                    Select Payment Method:
                   </label>
+                  <div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="paymentMethod"
+                        id="pickup"
+                        value="pickup"
+                      />
+                      <label className="form-check-label" htmlFor="pickup">
+                        Pickup
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="paymentMethod"
+                        id="cashOnDelivery"
+                        value="cashOnDelivery"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="cashOnDelivery"
+                      >
+                        Cash on Delivery
+                      </label>
+                    </div>
+                  </div>
                 </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="paymentMethod"
-                    id="cashOnDelivery"
-                    value="cashOnDelivery"
-                  />
-                  <label className="form-check-label" htmlFor="cashOnDelivery">
-                    Cash on Delivery
-                  </label>
-                </div>
+                <button type="button" className="btn btn-lg btn-primary mt-2">
+                  Checkout
+                </button>
               </div>
             </div>
-            <button type="button" className="btn btn-lg btn-primary mt-2">
-              Checkout
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </div>

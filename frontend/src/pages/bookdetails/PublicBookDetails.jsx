@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import BackToPrev from "../../components/dashboard/shared/BackToPrev";
+import useCart from "../../hooks/useCart";
 
 const PublicBookDetails = () => {
   const { book_id } = useParams();
   const [book, setBook] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { cart, addToCart } = useCart();
   // Base URL for the API
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -51,7 +53,13 @@ const PublicBookDetails = () => {
             <h5 className="card-title">{book?.title}</h5>
             <br />
             <div>
-              <button className="btn btn-success">Add to Cart</button>
+              <button
+                disabled={cart.includes(book._id)}
+                onClick={() => addToCart(book._id)}
+                className="btn btn-success"
+              >
+                {cart.includes(book._id) ? "Added to Cart" : "Add to Cart "}
+              </button>
             </div>
             <p className="card-text">
               <strong>Author:</strong> {book?.author}
