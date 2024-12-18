@@ -64,10 +64,7 @@ const getAllOrders = async (req, res) => {
       return res.status(404).json({ message: 'No orders found.' });
     }
 
-    res.status(200).json({
-      message: 'Orders fetched successfully.',
-      orders,
-    });
+    res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch orders.', error: error.message });
   }
@@ -87,7 +84,7 @@ const getOrderById = async (req, res) => {
 
     res.status(200).json({
       message: "Order fetched successfully.",
-      order,
+      data:order,
     });
   } catch (error) {
     res
@@ -116,7 +113,7 @@ const updateOrderStatus = async (req, res) => {
 
     res.status(200).json({
       message: 'Order status updated successfully.',
-      order,
+      data:order,
     });
   } catch (error) {
     res.status(500).json({ message: 'Failed to update order status.', error: error.message });
@@ -138,7 +135,7 @@ const getOrdersByStore = async (req, res) => {
         .json({ message: "No orders found for this store" });
     }
 
-    res.status(200).json({ orders });
+    res.status(200).json({ data:orders });
   } catch (error) {
     res
       .status(500)
@@ -148,8 +145,7 @@ const getOrdersByStore = async (req, res) => {
 
 // Controller to get orders for the logged-in user
 const getUserOrders = async (req, res) => {
-  const userId = req.user._id; // Assuming user ID is available in req.user after authentication
-
+  const userId = req.user._id; 
   try {
 
     const orders = await Order.find({ order_by: userId })
@@ -162,7 +158,7 @@ const getUserOrders = async (req, res) => {
       return res.status(404).json({ message: "No orders found." });
     }
 
-    res.status(200).json({ success: true, orders });
+    res.status(200).json({ success: true, data:orders });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }

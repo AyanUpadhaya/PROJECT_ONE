@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
 
   // Load cart from localStorage
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
+    const storedCart = localStorage.getItem("buchhandlung_cart");
     if (storedCart) {
       setCart(JSON.parse(storedCart));
     }
@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
 
   // Save cart to localStorage
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("buchhandlung_cart", JSON.stringify(cart));
   }, [cart]);
 
   // Add a book ID

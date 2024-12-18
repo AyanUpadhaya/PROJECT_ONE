@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./Cart.css";
 import useCart from "../../hooks/useCart";
 import BookRow from "./BookRow";
+import { extractOrderFormat } from "../../utils/extractOrderFormat";
+import useLoadUser from "../../hooks/useLoadUser";
+import useOrdersApi from "../../hooks/useOrdersApi";
 
 function Cart() {
-  const { fetchBooksFromCart, removeFromCart } = useCart();
+  const { fetchBooksFromCart, removeFromCart, clearCart } = useCart();
   const [cartBooks, setCartBooks] = useState([]);
+  const { user } = useLoadUser();
+  const { createOrder, loading } = useOrdersApi();
 
   useEffect(() => {
     const loadCartBooks = async () => {
@@ -37,9 +42,31 @@ function Cart() {
   };
   const handleRemoveBook = (bookId) => {
     // Implement remove functionality here
-    // cartBooks(cartBooks.filter(book=>book._id !== bookId));
     removeFromCart(bookId);
-    console.log(bookId);
+  };
+
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+  const handleChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const userId = user?._id;
+    const orderData = extractOrderFormat(cartBooks, userId, paymentMethod);
+
+    createOrder(orderData)
+      .then((data) => {
+        if (data?._id) {
+          console.log(data);
+          alert("Order created");
+          clearCart();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -122,26 +149,16 @@ function Cart() {
                   <label className="text-muted font-weight-normal">
                     Select Payment Method:
                   </label>
-                  <div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="paymentMethod"
-                        id="pickup"
-                        value="pickup"
-                      />
-                      <label className="form-check-label" htmlFor="pickup">
-                        Pickup
-                      </label>
-                    </div>
+                  <form onSubmit={handleSubmit}>
                     <div className="form-check">
                       <input
                         className="form-check-input"
                         type="radio"
                         name="paymentMethod"
                         id="cashOnDelivery"
-                        value="cashOnDelivery"
+                        value="Cash on Delivery"
+                        onChange={handleChange}
+                        required
                       />
                       <label
                         className="form-check-label"
@@ -150,11 +167,29 @@ function Cart() {
                         Cash on Delivery
                       </label>
                     </div>
-                  </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="paymentMethod"
+                        id="Pickup"
+                        value="Pickup"
+                        onChange={handleChange}
+                        required
+                      />
+                      <label className="form-check-label" htmlFor="Pickup">
+                        Pickup
+                      </label>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="btn btn-lg btn-primary mt-2"
+                    >
+                      {loading ? "Loading.." : "Checkout"}
+                    </button>
+                  </form>
                 </div>
-                <button type="button" className="btn btn-lg btn-primary mt-2">
-                  Checkout
-                </button>
               </div>
             </div>
           )}
