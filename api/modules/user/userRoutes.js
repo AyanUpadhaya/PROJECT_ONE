@@ -5,6 +5,7 @@ const {
   updateUserDetails,
   changePassword,
   updateProfilePicture,
+  getAllUsers,
 } = require("./userController");
 
 
@@ -20,5 +21,7 @@ router.put("/users/:user_id", updateUserDetails); //**
 router.put("/users/:user_id/password", changePassword); //**
 // Route to change picture
 router.patch("/users/:user_id/picture", updateProfilePicture); //**
+// Route to get all the users
+router.get("/users", getAllUsers);
 
 module.exports = router;

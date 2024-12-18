@@ -155,10 +155,23 @@ const updateProfilePicture = async (req, res) => {
   }
 };
 
+// Controller to get all users
+const getAllUsers = async (req, res) => {
+  try {
+    // Fetch all users, excluding the password field
+    const users = await User.find({}, "-password");
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Server error. Could not fetch users." });
+  }
+};
+
 module.exports = {
   register,
   login,
   changePassword,
   updateUserDetails,
   updateProfilePicture,
+  getAllUsers,
 };

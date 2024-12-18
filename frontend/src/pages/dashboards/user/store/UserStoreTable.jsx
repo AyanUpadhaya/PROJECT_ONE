@@ -16,8 +16,8 @@ const UserStoreTable = ({ data }) => {
   };
 
   const truncate = (text) => {
-    if(text) return text.length > 34 ? text.slice(0, 34) + "..." : text;
-    return text
+    if (text) return text.length > 34 ? text.slice(0, 34) + "..." : text;
+    return text;
   };
   return (
     <>

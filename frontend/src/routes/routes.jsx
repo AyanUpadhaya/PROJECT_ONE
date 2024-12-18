@@ -10,7 +10,6 @@ import PrivateRoute from "./PrivateRoute";
 import RedirectToDashboard from "../utils/RedirectToDashboard";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
-import AdminOrders from "../pages/dashboards/admin/orders/AdminOrders";
 import AdminUsers from "../pages/dashboards/admin/users/AdminUsers";
 import AdminStores from "../pages/dashboards/admin/stores/AdminStores";
 import AdminAddCategory from "../pages/dashboards/admin/categorys/AdminAddCategory";
@@ -99,10 +98,7 @@ const router = createBrowserRouter([
             element: <AdminHome></AdminHome>,
           },
 
-          {
-            path: "orders",
-            element: <AdminOrders></AdminOrders>,
-          },
+      
           {
             path: "users",
             element: <AdminUsers></AdminUsers>,

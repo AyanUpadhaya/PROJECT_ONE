@@ -176,19 +176,6 @@ export default function Sidebar() {
                 Users
               </Link>
             </li>
-            {/* orders */}
-            <li>
-              <Link
-                to={`/dashboard/${role}/orders`}
-                className={`nav-link ${isActive(
-                  ["/dashboard/admin/orders"],
-                  location
-                )}`}
-                aria-current="page"
-              >
-                Orders
-              </Link>
-            </li>
             {/* Stores */}
             <li>
               <Link
