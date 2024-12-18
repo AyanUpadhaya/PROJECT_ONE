@@ -4,7 +4,6 @@ import Home from "../pages/home/Home";
 import About from "../pages/about/About";
 import DashboardlLayout from "../layouts/DashboardlLayout";
 import AdminHome from "../pages/dashboards/admin/home/AdminHome";
-import AdminProfile from "../pages/dashboards/admin/profile/AdminProfile";
 import UserHome from "../pages/dashboards/user/home/UserHome";
 import UserProfile from "../pages/dashboards/user/profile/UserProfile";
 import PrivateRoute from "./PrivateRoute";
@@ -16,7 +15,6 @@ import AdminUsers from "../pages/dashboards/admin/users/AdminUsers";
 import AdminStores from "../pages/dashboards/admin/stores/AdminStores";
 import AdminAddCategory from "../pages/dashboards/admin/categorys/AdminAddCategory";
 import AdminCategorys from "../pages/dashboards/admin/categorys/AdminCategorys";
-import AdminSettings from "../pages/dashboards/admin/settings/AdminSettings";
 import AdminBooks from "../pages/dashboards/admin/books/AdminBooks";
 import AdminUpdateCategory from "../pages/dashboards/admin/categorys/AdminUpdateCategory";
 import { CategoryProvider } from "../context/CategoryContext";
@@ -100,10 +98,7 @@ const router = createBrowserRouter([
             path: "",
             element: <AdminHome></AdminHome>,
           },
-          {
-            path: "profile",
-            element: <AdminProfile></AdminProfile>,
-          },
+
           {
             path: "orders",
             element: <AdminOrders></AdminOrders>,
@@ -114,7 +109,11 @@ const router = createBrowserRouter([
           },
           {
             path: "books",
-            element: <AdminBooks></AdminBooks>,
+            element: (
+              <BookProvider>
+                <AdminBooks></AdminBooks>
+              </BookProvider>
+            ),
           },
           {
             path: "stores",
@@ -147,10 +146,6 @@ const router = createBrowserRouter([
                 <AdminUpdateCategory></AdminUpdateCategory>
               </CategoryProvider>
             ),
-          },
-          {
-            path: "settings",
-            element: <AdminSettings></AdminSettings>,
           },
         ],
       },

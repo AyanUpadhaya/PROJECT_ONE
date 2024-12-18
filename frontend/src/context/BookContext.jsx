@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useState, useCallback, useEffect } from "react";
 import { getToken } from "../utils/getToken";
 import useLoadUser from "../hooks/useLoadUser";
+import { useLocation } from "react-router-dom";
 
 export const BookContext = createContext(null);
 
@@ -14,6 +15,7 @@ export const BookProvider = ({ children }) => {
   const [books, setBooks] = useState([]);
   const [storeBooks, setStoreBooks] = useState([]);
   const { user } = useLoadUser();
+  const location = useLocation();
 
   // Base URL for the API
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -27,7 +29,6 @@ export const BookProvider = ({ children }) => {
     },
   });
 
- 
   // Create a new book
   const createBook = async (bookData, coverPhoto) => {
     setIsBookPosting(true);
@@ -67,7 +68,6 @@ export const BookProvider = ({ children }) => {
       if (response?.data) {
         setBooks(response?.data);
       }
-     
     } catch (err) {
       console.error(err);
     } finally {
@@ -80,13 +80,14 @@ export const BookProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axiosInstance.get(`/books/store/${user?.store_id}`);
+      const response = await axiosInstance.get(
+        `/books/store/${user?.store_id}`
+      );
       if (response?.data) {
         setStoreBooks(response?.data);
       }
-      return response.data
+      return response.data;
     } catch (err) {
-      
       console.error(err);
     } finally {
       setLoading(false);
@@ -117,7 +118,6 @@ export const BookProvider = ({ children }) => {
         )
       );
       return response.data?.data;
-    
     } catch (err) {
       console.error(err);
     } finally {
@@ -140,6 +140,10 @@ export const BookProvider = ({ children }) => {
     }
   };
 
+  function isActive(path, location) {
+    return path.includes(location.pathname) ? true : false;
+  }
+
   const libs = {
     user,
     books,
@@ -161,8 +165,7 @@ export const BookProvider = ({ children }) => {
   useEffect(() => {
     if (books.length == 0) {
       getAllBooks();
-      getBooksByStore();
-      
+      if (isActive(["/dashboard/user/books"], location)) getBooksByStore();
     }
   }, []);
 

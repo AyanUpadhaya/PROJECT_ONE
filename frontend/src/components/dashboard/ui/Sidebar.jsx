@@ -132,19 +132,7 @@ export default function Sidebar() {
                 Dashboard
               </Link>
             </li>
-            {/* profile */}
-            <li>
-              <Link
-                to={`/dashboard/${role}/profile`}
-                className={`nav-link ${isActive(
-                  ["/dashboard/admin/profile"],
-                  location
-                )}`}
-                aria-current="page"
-              >
-                Profile
-              </Link>
-            </li>
+          
             {/* books */}
             <li>
               <Link
@@ -212,19 +200,6 @@ export default function Sidebar() {
                 aria-current="page"
               >
                 Stores
-              </Link>
-            </li>
-            {/* Settings */}
-            <li>
-              <Link
-                to={`/dashboard/${role}/settings`}
-                className={`nav-link ${isActive(
-                  ["/dashboard/admin/settings"],
-                  location
-                )}`}
-                aria-current="page"
-              >
-                Settings
               </Link>
             </li>
           </ul>
