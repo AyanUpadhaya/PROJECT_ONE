@@ -1,5 +1,5 @@
-import React from 'react'
-import CategoryDropdown from './CategoryDropdown';
+import React from "react";
+import CategoryDropdown from "./CategoryDropdown";
 
 const AddForm = ({
   handleSubmit,
@@ -31,12 +31,16 @@ const AddForm = ({
           />
         </div>
 
-        {categories.length > 0 && (
+        {categories.length > 0 ? (
           <CategoryDropdown
             categories={categories}
             selectedCategory={bookDetails.category_id}
             onCategoryChange={handleCategoryChange}
           />
+        ) : (
+          <div>
+            <h4>Please contact admin to create categories</h4>
+          </div>
         )}
         <div>
           <label htmlFor="author">Author</label>
@@ -171,4 +175,4 @@ const AddForm = ({
   );
 };
 
-export default AddForm
+export default AddForm;

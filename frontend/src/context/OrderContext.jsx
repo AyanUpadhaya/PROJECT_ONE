@@ -72,7 +72,6 @@ export const OrderProvider = ({ children }) => {
   };
 
   const libs = {
-    updateOrderStatus,
     fetchOrdersByStore,
     deleteOrder,
     updateOrderStatus,
