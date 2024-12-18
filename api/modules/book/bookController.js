@@ -189,12 +189,9 @@ const getSingleBook = async (req, res) => {
 
     // Find the book by its ID and populate required fields
     const book = await Book.findById(book_id)
-      .populate("category_id") // Populate the category details
-      .populate("store_id") // Populate the store details
-      .populate({
-        path: "reviews.user", // Populate the user details in reviews
-        select: "name email", // Include only name and email of the user
-      });
+      .populate("category_id") 
+      .populate("store_id") 
+     
 
     // If the book is not found, return a 404 error
     if (!book) {

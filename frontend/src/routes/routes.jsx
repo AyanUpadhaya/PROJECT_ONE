@@ -34,6 +34,7 @@ import { StoreProvider } from "../context/StoreContext";
 import UserStoreDetails from "../pages/dashboards/user/store/UserStoreDetails";
 import { BookProvider } from "../context/BookContext";
 import BookDetails from "../pages/dashboards/user/books/BookDetails";
+import PublicBookDetails from "../pages/bookdetails/PublicBookDetails";
 
 const router = createBrowserRouter([
   //website
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home></Home>,
+      },
+      {
+        path: "book_details/:book_id",
+        element: <PublicBookDetails></PublicBookDetails>,
       },
       {
         path: "about",
