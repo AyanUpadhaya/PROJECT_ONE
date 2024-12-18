@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BookRow = ({ book, onQuantityChange }) => {
+const BookRow = ({ book, onQuantityChange, handleRemoveBook }) => {
   const handleQuantityChange = (newQty) => {
     const clampedQty = Math.max(1, Math.min(newQty, book.qty)); // Ensure within range
     onQuantityChange(book._id, clampedQty);

@@ -4,7 +4,7 @@ import useCart from "../../hooks/useCart";
 import BookRow from "./BookRow";
 
 function Cart() {
-  const { fetchBooksFromCart } = useCart();
+  const { fetchBooksFromCart, removeFromCart } = useCart();
   const [cartBooks, setCartBooks] = useState([]);
 
   useEffect(() => {
@@ -37,7 +37,9 @@ function Cart() {
   };
   const handleRemoveBook = (bookId) => {
     // Implement remove functionality here
-    console.log(`Remove book with ID: ${bookId}`);
+    // cartBooks(cartBooks.filter(book=>book._id !== bookId));
+    removeFromCart(bookId);
+    console.log(bookId);
   };
 
   return (
@@ -90,6 +92,7 @@ function Cart() {
                       key={book._id}
                       onQuantityChange={handleQuantityChange}
                       book={book}
+                      handleRemoveBook={handleRemoveBook}
                     ></BookRow>
                   ))
                 ) : (
