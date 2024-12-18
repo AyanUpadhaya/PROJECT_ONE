@@ -84,6 +84,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     loadUserFromLocalStorage();
   }, []);
+  useEffect(() => {
+    saveUserToLocalStorage(user);
+  }, [user]);
 
   return (
     <AuthContext.Provider

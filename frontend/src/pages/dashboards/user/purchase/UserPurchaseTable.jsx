@@ -16,27 +16,39 @@ const UserPurchaseTable = ({ orders }) => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{new Date(order.date).toLocaleDateString()}</td>
-                <td>{order.stores[0]?.store_id?.name}</td>
-                <td>
-                  <ul className="list-unstyled">
-                    {order.stores[0]?.books.map((book) => (
-                      <li key={book.book_id._id}>
-                        <span className="fw-bold">{book.book_id.title}</span>
-                        <br /> by {book.book_id.author}
-                        <br />
-                        Qty: {book.qty}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td>${order.stores[0]?.total_price}</td>
-                <td>{order.status}</td>
-              </tr>
-            ))}
+            {orders.map((order) =>
+              order.stores.map((store, index) => (
+                <tr key={`${order._id}-${store._id}`}>
+                  {/* Order ID and Date should  displayed in the first row for each order */}
+                  {index === 0 && (
+                    <>
+                      <td rowSpan={order.stores.length}>{order._id}</td>
+                      <td rowSpan={order.stores.length}>
+                        {new Date(order.date).toLocaleDateString()}
+                      </td>
+                    </>
+                  )}
+                  <td>{store.store_id.name}</td>
+                  <td>
+                    <ul className="list-unstyled">
+                      {store.books.map((book) => (
+                        <li key={book.book_id._id}>
+                          <span className="fw-bold">{book.book_id.title}</span>
+                          <br /> by {book.book_id.author}
+                          <br />
+                          Qty: {book.qty}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td>${store.total_price}</td>
+                  {/* Status should also only appear in the first row for each order */}
+                  {index === 0 && (
+                    <td rowSpan={order.stores.length}>{order.status}</td>
+                  )}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -45,3 +57,4 @@ const UserPurchaseTable = ({ orders }) => {
 };
 
 export default UserPurchaseTable;
+

@@ -74,7 +74,7 @@ const UserAddStore = () => {
         store_id: response?.data?.data?._id,
         is_store_owner: true,
       });
-       setStoreDetails({ name: "", location: "", description: "" });
+      setStoreDetails({ name: "", location: "", description: "" });
     } catch (error) {
       setErrorMessage(
         error.response?.data?.message || "Failed to create store."
@@ -82,7 +82,6 @@ const UserAddStore = () => {
       console.error(error);
     } finally {
       setLoading(false);
-     
     }
   };
 
