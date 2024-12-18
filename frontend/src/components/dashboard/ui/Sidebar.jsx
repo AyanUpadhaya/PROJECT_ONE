@@ -91,7 +91,7 @@ export default function Sidebar() {
               </Link>
             </li>
             {/* store orders */}
-            <li>
+            <li className={`${!user.is_store_owner && "d-none"}`}>
               <Link
                 to={`/dashboard/${role}/orders`}
                 className={`nav-link ${isActive(
@@ -132,7 +132,7 @@ export default function Sidebar() {
                 Dashboard
               </Link>
             </li>
-          
+
             {/* books */}
             <li>
               <Link
