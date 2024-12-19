@@ -34,7 +34,5 @@ router.get("/stores/user/:userId", getUserStores); //**
 // Update a store
 router.put("/stores/:id", verifyToken, updateStore); //**
 
-// Like/Unlike a store
-router.put("/stores/:id/like", verifyToken, toggleLikeStore); //**
 
 module.exports = router;

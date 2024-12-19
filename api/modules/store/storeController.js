@@ -193,41 +193,7 @@ const updateCoverPicture = async (req, res) => {
   }
 };
 
-// Like or Unlike a store
-const toggleLikeStore = async (req, res) => {
-  try {
-    const storeId = req.params.id;
-    const userId = req.user._id;
 
-    // Find the store by ID
-    const store = await Store.findById(storeId);
-
-    if (!store) {
-      return res.status(404).json({ message: "Store not found." });
-    }
-
-    // Check if the user has already liked the store
-    const isLiked = store.liked_by.includes(userId);
-
-    if (isLiked) {
-      // Remove the user's like (unlike)
-      store.liked_by = store.liked_by.filter(
-        (user) => user.toString() !== userId.toString()
-      );
-      await store.save();
-      return res.status(200).json({ message: "Store unliked successfully." });
-    } else {
-      // Add the user's like
-      store.liked_by.push(userId);
-      await store.save();
-      return res.status(200).json({ message: "Store liked successfully." });
-    }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to toggle like status.", error: error.message });
-  }
-};
 
 module.exports = {
   createStore,
@@ -236,6 +202,5 @@ module.exports = {
   deleteStore,
   getUserStores,
   updateStore,
-  toggleLikeStore,
   updateCoverPicture,
 };

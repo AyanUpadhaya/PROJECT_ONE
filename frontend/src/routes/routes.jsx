@@ -35,6 +35,7 @@ import PublicBookDetails from "../pages/bookdetails/PublicBookDetails";
 import { CartProvider } from "../context/CartContext";
 import LoginRoute from "./LoginRoute";
 import { OrderProvider } from "../context/OrderContext";
+import NotFound from "../pages/notfound/Notfound";
 
 const router = createBrowserRouter([
   //website
@@ -98,7 +99,6 @@ const router = createBrowserRouter([
             element: <AdminHome></AdminHome>,
           },
 
-      
           {
             path: "users",
             element: <AdminUsers></AdminUsers>,
@@ -244,6 +244,8 @@ const router = createBrowserRouter([
       },
     ],
   },
+  //not found
+  { path: "*", element: <NotFound /> },
 ]);
 
 export default router;

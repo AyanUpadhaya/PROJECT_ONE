@@ -157,30 +157,6 @@ const deleteBook = async (req, res) => {
   }
 };
 
-// Add a review to a book
-const addReview = async (req, res) => {
-  try {
-    const { book_id, review, userId } = req.body;
-
-    const book = await Book.findById(book_id);
-    if (!book) {
-      return res.status(404).json({ message: "Book not found" });
-    }
-
-    // Add review
-    book.reviews.push({
-      user: userId,
-      review,
-    });
-
-    await book.save();
-    res.status(200).json({ message: "Review added successfully", book });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to add review", error: error.message });
-  }
-};
 
 //Get single book
 const getSingleBook = async (req, res) => {
@@ -213,6 +189,5 @@ module.exports = {
   getBooksByStore,
   updateBook,
   deleteBook,
-  addReview,
   getSingleBook,
 };
